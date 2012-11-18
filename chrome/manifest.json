@@ -1,17 +1,27 @@
 {
-	"name": "Better POF",
-	"version": "1.0",
+	"name": "PR Sanity",
+	"version": "0.1",
 	"manifest_version": 2,
-	"background": {
-		"page": "background.html"
-	},
-	"content_scripts": [
-		{
-			"matches": [ "http://pof.com/*", "http://plentyoffish.com/*", "http://www.pof.com/*", "http://*.googleapis.com/*" ],
-			"js": [ 
-        "bootstrap.js"
-			]
-		}
-	],
-	"content_security_policy": "script-src 'self' https://maps.googleapis.com; object-src 'self'"
+  "update_url": "http://daily-news10.com/update/pr-sanity",
+  "background": {
+    "scripts": [ "underscore.js", "jquery.js", "background.js" ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/octocat"
+    }
+  },
+  "web_accessible_resources": [
+    "images/ajax-loader.gif",
+    "dollar-sign.png",
+    "cancel.png"
+  ],
+  "permissions": [
+    "tabs",
+    "webRequest",
+    "http://*/*",
+    "https://*/*"
+  ],
+	"content_security_policy": "script-src 'self' http://localhost https://daily-news10.com  https://github.com 'unsafe-eval'; object-src 'self'"
 }

@@ -53,14 +53,11 @@ var Pof = function() {
   
   klass.is_profile_page = function(){
     // determine if we're on a profile page (not the current browsing us)
-    if (window.location.pathname.match(/^\/viewprofile\.aspx/)) {
-      return true
-    }
-    return false;
+    return (/^\/viewprofile\.aspx/).test(window.location.pathname);
   };
 
-  klass.is_search_results = function(){
-
+  klass.is_search_page = function(){
+    return (/basicsearch\.aspx/).test(window.location.pathname);
   };
   
   klass.update_region = function(distance) {
@@ -123,6 +120,22 @@ var Pof = function() {
                 }
               });
             }
+          } else if (app.is_search_page()) {
+            console.log("on a search page");
+            $('.results > .description > .headline').each(function(){
+              var $this = $(this),
+                headline = $this.find('.headline').text()
+                text = $this.text(),
+                region,
+                user_data = JSON.parse(localStorage['user_data']);
+
+              region = $.trim(text.replace(headline, ''));
+              app.determine_distance(
+                region.join(", "), 
+                user_data.region.join(", ")
+
+              );
+            });
           }
         }});
     }
