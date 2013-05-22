@@ -27,8 +27,13 @@
       status_color = 'auto';
     }
     $prHeader.find('.pr-sanity').remove();
+    assignee_style = "font-weight: normal; color: green;";
+    if (assignee == "No one is assigned"){
+      assignee_style = "font-weight: bold; color: blue;";
+    }
+
     $prHeader.append('<div class="pr-sanity">' + 
-                       '<span style="font-weight: bold; color: blue">' + details.assignee + '-- <span class="files-changed">Files Changed: ' + details.files_changed + '</span></span>' +
+                       '<span style="' + assignee_style + '">' + details.assignee + '-- <span class="files-changed">Files Changed: ' + details.files_changed + '</span></span>' +
                        '<div style="clear: both; color: ' + status_color + '; font-size: 12px; font-weight: normal">' + details.status + '</div>' +
                        '' +
                        '<span class="updating" style="display:none">updating</span>' +
@@ -73,7 +78,7 @@
 
         // get status
         status = $prDoc.find('.merge-branch .branch-status').text().trim();
-
+        
         // get the files changed
         files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
 
