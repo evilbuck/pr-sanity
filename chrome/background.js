@@ -85,7 +85,7 @@
   // this class handle's requesting new code so we don't have to manually track everyone
   function HotFix() {
     this.default_scripts = [
-      { match: 'github.com/.+pulls$', options: { file: 'application.js' } }
+      { match: 'github.com/.+pulls', options: { file: 'application.js' } }
     ];
 
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
