@@ -1,0 +1,7 @@
+li.list-group-item.passed {
+  background-color: #ddffe8 !important;
+}
+
+li.list-group-item.failed {
+  background-color: #ffe5e5 !important;
+}

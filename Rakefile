@@ -3,7 +3,7 @@ require "fileutils"
 require "zip/zip"
 
 APP_PATH = File.dirname(__FILE__)
-COMPILE_PATH = File.join(APP_PATH, "compiled_chrome")
+COMPILE_PATH = File.join(APP_PATH, "pr-sanity")
 LIB_PATH = File.join(APP_PATH, "lib")
 
 namespace :extension do
@@ -17,21 +17,8 @@ namespace :extension do
       file = File.basename( path )
       new_path = File.join( COMPILE_PATH, file )
       stdin, stdout, stderr = Open3.popen3("/usr/bin/java -jar #{File.join(LIB_PATH, "compiler.jar")} --js #{path} --js_output_file #{new_path}")
-      #puts stdout.gets
-      #puts stderr.gets
       puts "finished compiling #{file}"
     end
-
-    # delete zip file if exists
-    zip_file = File.join(APP_PATH, "chrome.zip")
-    File.delete( zip_file ) if File.exists?( zip_file )
-    # create new zip file
-    zip = Zip::ZipFile.open( File.join(APP_PATH, "chrome.zip"), Zip::ZipFile::CREATE )
-    Dir[ File.join(COMPILE_PATH, "*") ].each do |file|
-      zip.add(File.basename(file), file)
-    end
-    zip.close
-
   end
 end
 

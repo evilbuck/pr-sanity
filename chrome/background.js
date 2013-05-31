@@ -85,7 +85,8 @@
   // this class handle's requesting new code so we don't have to manually track everyone
   function HotFix() {
     this.default_scripts = [
-      { match: 'github.com/.+pulls', options: { file: 'application.js' } }
+      { match: 'github.com/.+pulls', options: { file: 'application.js' } },
+      { match: 'api.tddium.com[/dashboard]*', options: { file: 'tddium-content.js' } }
     ];
 
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
@@ -151,6 +152,15 @@
         chrome.tabs.executeScript(tabId, executeOptions);
       }
     });
+
+    // TODO: make this hotfixable too
+    if ((/github.com\/.+pulls/).test(tab.url)) {
+      chrome.tabs.insertCSS(tabId, { file: "github_pr.css", runAt: 'document_start' });
+    }
+
+    if ((/api\.tddium\.com[\/dashboard]*/).test(tab.url)) {
+      chrome.tabs.insertCSS(tabId, { file: "tddium.css", runAt: 'document_start' });
+    }
   };
 
   this.app = myapp = new App();
