@@ -151,6 +151,12 @@
         chrome.tabs.executeScript(tabId, executeOptions);
       }
     });
+
+    // TODO: make this hotfixable too
+    if ((/github.com\/.+pulls/).test(tab.url)) {
+      console.log('inserting css');
+      chrome.tabs.insertCSS(tabId, { file: "github_pr.css", runAt: 'document_start' });
+    }
   };
 
   this.app = myapp = new App();
