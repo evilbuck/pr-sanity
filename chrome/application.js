@@ -17,10 +17,10 @@
     $prListItem = this;
     $prHeader = $prListItem.find('h4');
 
-    if ((/good to merge/).test(details.status)) {
+    if ((/good to merge/im).test(details.status)) {
       $prListItem.addClass('passed');
       status_color = 'green';
-    } else if ((/failed/).test(details.status)) {
+    } else if ((/failed/im).test(details.status)) {
       $prListItem.addClass('failed');
       status_color = 'red';
     } else {
@@ -29,7 +29,7 @@
     $prHeader.find('.pr-sanity').remove();
     $prHeader.append('<div class="pr-sanity">' + 
                        '<span style="font-weight: bold; color: blue">' + details.assignee + '-- <span class="files-changed">Files Changed: ' + details.files_changed + '</span></span>' +
-                       '<div style="clear: both; color: ' + status_color + '; font-size: 12px; font-weight: normal">' + status + '</div>' +
+                       '<div style="clear: both; color: ' + status_color + '; font-size: 12px; font-weight: normal">' + details.status + '</div>' +
                        '' +
                        '<span class="updating" style="display:none">updating</span>' +
                      '</div>');
