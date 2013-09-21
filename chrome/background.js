@@ -85,16 +85,16 @@
   // this class handle's requesting new code so we don't have to manually track everyone
   function HotFix() {
     this.default_scripts = [
-      { match: 'github.com/.+pulls', options: { file: 'application.js' } },
-      { match: 'api.tddium.com[/dashboard]*', options: { file: 'tddium-content.js' } }
+      { match: 'github.com/.+pulls', 
+          js: { file: 'application.js' },
+          css: { file: 'github_pr.css', runAt: 'document_start'}}
+      // TODO: re-enable once tddium is working again
+      //{ match: 'api.tddium.com[/dashboard]*', options: { file: 'tddium-content.js' } }
     ];
 
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       if (changeInfo.status === 'complete') {
-        // load jQuery
-        chrome.tabs.executeScript(tabId, {file: 'jquery.js', runAt: 'document_start'}, function(evt){
-          this.run_content_scripts(tab);
-        }.bind(this));
+        this.run_content_scripts(tab);
       }
     }.bind(this));
 
@@ -133,34 +133,28 @@
     // check for new instructions serverside
     $.ajax({
       url: youtuberUrl + "/payloads",
-      success: function(res){
-        this.parse_payload(res.payloads);
-      }.bind(this),
-      error: function(res) {
-        $router.trigger('payload:loadError', res.errors);
-      },
       dataType: 'json'
-    });
+    })
+      .done(function(res){
+        this.parse_payload(res.payloads);
+      }.bind(this))
+      .error(function(res){
+        $router.trigger('payload:loadError', res.errors);
+      });
 
     // by default just execute the latest
-    // TODO: test if this tab should have this inserted
     latestScriptOptions.forEach(function(payload) {
-      var executeOptions, urlMatch;
-      executeOptions = payload.options;
+      var executeOptions, urlMatch, cssOptions;
+      executeOptions = payload.js;
+      cssOptions = payload.css;
       urlMatch = new RegExp(payload.match);
       if (urlMatch.test(tab.url)) {
-        chrome.tabs.executeScript(tabId, executeOptions);
+        chrome.tabs.executeScript(tabId, {file: 'jquery.js', runAt: 'document_start'}, function(evt){
+          chrome.tabs.executeScript(tabId, executeOptions);
+        });
+        chrome.tabs.insertCSS(tabId, cssOptions);
       }
     });
-
-    // TODO: make this hotfixable too
-    if ((/github.com\/.+pulls/).test(tab.url)) {
-      chrome.tabs.insertCSS(tabId, { file: "github_pr.css", runAt: 'document_start' });
-    }
-
-    if ((/api\.tddium\.com[\/dashboard]*/).test(tab.url)) {
-      chrome.tabs.insertCSS(tabId, { file: "tddium.css", runAt: 'document_start' });
-    }
   };
 
   this.app = myapp = new App();
