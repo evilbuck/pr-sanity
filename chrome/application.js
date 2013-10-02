@@ -49,11 +49,11 @@
     // did we already fetch this?
     prNumber = $(this).attr('href').match(/\/([\d]+)$/)[1];
     cache = localStorage.getItem('pr:' + prNumber);
-    $prListItem.find('.pr-sanity .updating').show();
 
     if (cache) {
       updatePR.call($prListItem, JSON.parse(cache));
     }
+    $prListItem.find('.pr-sanity .updating').show();
 
     jqxhr = $.ajax({
       url: $(this).attr('href'),

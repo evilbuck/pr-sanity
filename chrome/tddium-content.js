@@ -34,15 +34,17 @@ $(function(){
     }
   });
 
-  $('.new-repo h2').append('<div><label for="tddium-filter">Filter:</label><input name="tddium_filter" id="tddium-filter" placeholder="type in your filter"/></div>');
+  var $filterWrapper = $('<div><label for="tddium-filter">Filter:</label><input name="tddium_filter" id="tddium-filter" placeholder="type in your filter"/></div>');
+  var $filterInput = $filterWrapper.find('input');
+  $filterWrapper.appendTo('.new-repo h2');
 
   // hide the branches that don't match
-  $('#tddium-filter').on('keyup', function(){
+  $filterInput.on('keyup', function(){
     filterTimeout = setTimeout(function(){
      if ( filterTimeout ) {
        clearTimeout( filterTimeout );
      }
-     filterPrefix = $('#tddium-filter').val();
+     filterPrefix = $filterInput.val();
      localStorage.setItem('filterPrefix', filterPrefix );
      $('.suites tbody > tr').show();
      hide();
