@@ -5,3 +5,41 @@ li.list-group-item.passed {
 li.list-group-item.failed {
   background-color: #ffe5e5 !important;
 }
+
+.sanity-assignees-wrapper ul {
+  list-style: none;
+}
+
+.sanity-assignee {
+  cursor: pointer;
+  height: 22px;
+  margin-bottom: 4px;
+}
+
+.sanity-assignee .count {
+  background: green;
+  border-radius: 12px;
+  color: #fff;
+  display: inline-block;
+  height: 16px;
+  margin-right: .5em;
+  padding: 3px;
+  width: 16px;
+  text-align: center;
+}
+
+.sanity-assignee.no-one .count {
+  background: red;
+}
+
+.sanity-assignee .name {
+  font-weight: bold;
+}
+
+.sanity-assignee:hover .count, .sanity-assignee.active .count {
+  box-shadow: 0 0 3px 3px rgba(111, 209, 31, .5);
+}
+
+.sanity-assignee.no-one:hover .count, .sanity-assignee.no-one.active .count {
+  box-shadow: 0 0 3px 3px rgba(237, 0, 0, .5);
+}

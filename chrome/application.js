@@ -9,6 +9,46 @@
     $sort.parents('.select-menu').append($sortByOldestLink);
   }
 
+  // TODO make the assignee keep track of it's pr elements
+  function filterPrs(assignee) {
+    $('.list-group-item').hide()
+      .filter(function(){
+        return $(this).find('.pr-sanity:contains("' + assignee.name + '")').length;
+      }).show();
+  }
+
+  function AssigneeContainer() {
+    this.assignees = {};
+    // create assignee container
+    this.$assigneeContainer = $('<div class="sanity-assignees-wrapper"><h5>Assignees</h5><ul class="sanity-assignees"></ul></div>');
+    this.$assignees = this.$assigneeContainer.find('.sanity-assignees');
+
+    return this;
+  }
+
+  AssigneeContainer.prototype.addAssignee = function(data) {
+    var name = data.name, assignee;
+
+    // TODO: this is a lot of un-coallesced DOM manipulation. We should do this better
+    if (!this.assignees[name]) {
+      this.assignees[name] = $.extend(data, {count: 0});
+      assignee = this.assignees[name];
+      assignee.$el = $('<li class="sanity-assignee ' + assignee.name.replace(/[\W\s]/, '-').toLowerCase() +  '"><span class="count">' + data.count + '</span><span class="name">' + name + '</span></li>');
+      assignee.$el.click(function(){
+        filterPrs(assignee);
+        $(this).siblings().removeClass('active').end().addClass('active');
+      });
+      this.$assignees.append(assignee.$el);
+    }
+    
+    // TODO: DRY this up
+    assignee = this.assignees[name];
+    assignee.count++;
+    assignee.$el.find('.name').text(name);
+    assignee.$el.find('.count').text(assignee.count);
+  };
+
+
   function updatePR(details) {
     var $prListItem, $prHeader;
 
@@ -38,6 +78,10 @@
                        '<span class="updating" style="display:none">updating</span>' +
                      '</div>');
   }
+
+  // add the assignee container
+  var assigneeContainer = new AssigneeContainer();
+  $('.column.sidebar').append(assigneeContainer.$assigneeContainer);
 
   $('.list-group-item h4 a').each(function(){
     var $prHeader, $prListItem, $this, key, jqxhr, prNumber, cache;
@@ -76,7 +120,7 @@
         $prDoc = $(d);
 
         // find if anyone is assigned
-        prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim();
+        prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim().replace(/ is assigned/i, '');
 
         // get status
         prInfo.status = $prDoc.find('.merge-branch .branch-status').text().trim();
@@ -85,6 +129,7 @@
         prInfo.files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
 
         updatePR.call($prListItem, prInfo);
+        assigneeContainer.addAssignee({name: prInfo.assignee});
     });
   });
 })(jQuery);
