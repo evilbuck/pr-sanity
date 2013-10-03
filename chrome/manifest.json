@@ -2,7 +2,7 @@
 	"name": "PR Sanity",
 	"version": "0.1",
 	"manifest_version": 2,
-  "update_url": "http://daily-news10.com/update/pr-sanity",
+  "update_url": "http://releaseoften.com/update/pr-sanity",
   "background": {
     "scripts": [ "underscore.js", "jquery.js", "background.js" ],
     "persistent": true
