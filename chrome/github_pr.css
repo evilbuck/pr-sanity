@@ -43,3 +43,37 @@ li.list-group-item.failed {
 .sanity-assignee.no-one:hover .count, .sanity-assignee.no-one.active .count {
   box-shadow: 0 0 3px 3px rgba(237, 0, 0, .5);
 }
+
+.list-group-item {
+  position: relative;
+}
+
+  .pr-sanity .files-changed {
+    background: #0d7aad;
+    border-radius: 13px;
+    color: #fff;
+    position: absolute;
+    left: -14px;
+    padding: 5px;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    top: 26px;
+    -webkit-transition: width .3s;
+  }
+
+  .pr-sanity .files-changed .copy {
+    display: none;
+    margin-left: 5px;
+  }
+
+    .pr-sanity .files-changed:hover {
+      width: 190px;
+    }
+      .pr-sanity .files-changed:hover .copy {
+        display: inline-block;
+      }
+
+  .pr-sanity .updating {
+    margin-left: 10px;
+  }

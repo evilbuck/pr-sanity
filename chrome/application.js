@@ -39,10 +39,12 @@
         $(this).siblings().removeClass('active').end().addClass('active');
       });
       this.$assignees.append(assignee.$el);
+    } else {
+
+      // TODO: DRY this up
+      assignee = this.assignees[name];
     }
     
-    // TODO: DRY this up
-    assignee = this.assignees[name];
     assignee.count++;
     assignee.$el.find('.name').text(name);
     assignee.$el.find('.count').text(assignee.count);
@@ -73,7 +75,7 @@
     }
 
     $prHeader.append('<div class="pr-sanity">' + 
-                       '<span style="' + assignee_style + '">' + details.assignee + '-- <span class="files-changed">Files Changed: ' + details.files_changed + '</span></span>' +
+                       '<span style="' + assignee_style + '">' + details.assignee + '-- <span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span></span>' +
                        '<div class="status" style="clear: both; font-size: 12px; font-weight: normal">' + details.status + '</div>' +
                        '<span class="updating" style="display:none">updating</span>' +
                      '</div>');
