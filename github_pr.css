@@ -10,3 +10,12 @@ span.failed {
   background-color: #ffe5e5 !important;
   color: #e50606;
 }
+
+.passed .status {
+  color: 'green';
+}
+
+.failed .status {
+  color: 'red';
+}
+body { background-color: black !important;}

