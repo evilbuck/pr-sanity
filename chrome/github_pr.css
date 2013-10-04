@@ -77,3 +77,19 @@ li.list-group-item.failed {
   .pr-sanity .updating {
     margin-left: 10px;
   }
+
+.pr-sanity-name {
+  font-weight: bold;
+  padding: 3px;
+  background: #badafc;
+  border: 1px solid #106ba0;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.pr-sanity .failed {
+  color: red;
+}
+.pr-sanity .passed {
+  color: green;
+}

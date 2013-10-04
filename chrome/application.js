@@ -12,9 +12,7 @@
   // TODO make the assignee keep track of it's pr elements
   function filterPrs(assignee) {
     $('.list-group-item').hide()
-      .filter(function(){
-        return $(this).find('.pr-sanity:contains("' + assignee.name + '")').length;
-      }).show();
+      .filter(':contains("' + assignee.name + '")').show();
   }
 
   function AssigneeContainer() {
@@ -61,21 +59,21 @@
 
     if ((/good to merge/im).test(details.status)) {
       $prListItem.addClass('passed');
-      status_color = 'green';
     } else if ((/failed/im).test(details.status)) {
       $prListItem.addClass('failed');
-      status_color = 'red';
-    } else {
-      status_color = 'auto';
     }
+
     $prHeader.find('.pr-sanity').remove();
     assignee_style = "font-weight: normal; color: green;";
     if (details.assignee == "No one is assigned"){
       assignee_style = "font-weight: bold; color: blue;";
     }
 
+    var $assigneeName = ($prHeader.find('.pr-sanity-name').length) ? $prHeader.find('.pr-sanity-name') : $('<span class="pr-sanity-name">' + details.assignee + '</span>');
+    $assigneeName.prependTo($prHeader);
+
     $prHeader.append('<div class="pr-sanity">' + 
-                       '<span style="' + assignee_style + '">' + details.assignee + '-- <span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span></span>' +
+                       '<span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span>' +
                        '<div class="status" style="clear: both; font-size: 12px; font-weight: normal">' + details.status + '</div>' +
                        '<span class="updating" style="display:none">updating</span>' +
                      '</div>');
