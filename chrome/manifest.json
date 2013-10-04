@@ -1,12 +1,14 @@
 {
 	"name": "PR Sanity",
-	"version": "0.1",
+	"version": "0.1.4",
 	"manifest_version": 2,
-  "update_url": "http://releaseoften.com/update/pr-sanity",
   "background": {
     "scripts": [ "underscore.js", "jquery.js", "background.js" ],
     "persistent": true
   },
+  "icons": { "128": "icon128.png",
+    "48": "icon48.png",
+    "19": "icon19.png" },
   "browser_action": {
     "default_icon": {
       "19": "images/octocat"
@@ -23,5 +25,5 @@
     "http://*/*",
     "https://*/*"
   ],
-	"content_security_policy": "script-src 'self' http://localhost https://daily-news10.com  https://github.com 'unsafe-eval'; object-src 'self'"
+	"content_security_policy": "script-src 'self' https://github.com 'unsafe-eval'; object-src 'self'"
 }

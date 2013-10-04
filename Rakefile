@@ -15,6 +15,7 @@ namespace :extension do
     # get the list of js files
     Dir[File.join(File.dirname(__FILE__), "chrome", "*.js")].each do |path|
       file = File.basename( path )
+      next if file == 'jquery.js'
       new_path = File.join( COMPILE_PATH, file )
       stdin, stdout, stderr = Open3.popen3("/usr/bin/java -jar #{File.join(LIB_PATH, "compiler.jar")} --js #{path} --js_output_file #{new_path}")
       puts "finished compiling #{file}"
