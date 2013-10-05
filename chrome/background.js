@@ -3,7 +3,7 @@
     , WORK_OFFLINE = true, updateUrl, $router;
 
   $router = $({});
-  updateUrl = 'http://evilbuck.net';
+  updateUrl = 'http://releaseoften.com';
   var myapp, install_key = "install_" + VERSION, Util;
 
   Util = {
