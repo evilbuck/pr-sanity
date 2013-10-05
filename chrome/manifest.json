@@ -1,6 +1,6 @@
 {
 	"name": "PR Sanity",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"manifest_version": 2,
   "background": {
     "scripts": [ "underscore.js", "jquery.js", "background.js" ],
@@ -22,8 +22,8 @@
   "permissions": [
     "tabs",
     "webRequest",
-    "http://*/*",
-    "https://*/*"
+    "http://github.com/*",
+    "https://github.com/*"
   ],
 	"content_security_policy": "script-src 'self' https://github.com 'unsafe-eval'; object-src 'self'"
 }
