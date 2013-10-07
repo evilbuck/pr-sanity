@@ -6,7 +6,11 @@ multiple PR's. I wanted to look at the Pull Requests and quickly see
   * how many files were changed
   * if there was a failed or passing message in the status update
 
-# Getting Started
+## Quick Install
+  - Visit the chrome store http://bit.ly/GBHuIw
+  - click the "+ Free" button to install and agree to permissions
+
+## Getting Started developing
   
   - clone this repo
   - open the extensions pane in chrome by visiting ```chrome://extensions``` in the address bar
