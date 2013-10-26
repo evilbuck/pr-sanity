@@ -34,10 +34,18 @@ li.list-group-item.failed {
 
 .sanity-assignee .name {
   font-weight: bold;
+  border-bottom: 3px solid transparent;
 }
 
 .sanity-assignee:hover .count, .sanity-assignee.active .count {
   box-shadow: 0 0 3px 3px rgba(111, 209, 31, .5);
+}
+
+.sanity-assignee.active  .name {
+  border-color: green;
+}
+.sanity-assignee.active.no-one .name {
+  border-color: red;
 }
 
 .sanity-assignee.no-one:hover .count, .sanity-assignee.no-one.active .count {
