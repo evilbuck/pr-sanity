@@ -33,8 +33,18 @@
       assignee = this.assignees[name];
       assignee.$el = $('<li class="sanity-assignee ' + assignee.name.replace(/[\W\s]/, '-').toLowerCase() +  '"><span class="count">' + data.count + '</span><span class="name">' + name + '</span></li>');
       assignee.$el.click(function(){
-        filterPrs(assignee);
-        $(this).siblings().removeClass('active').end().addClass('active');
+        // is this already selected?
+        assignee.$el.siblings().removeClass('active');
+        
+        // TODO this is wasteful - we're showing them all then hiding 
+        if (assignee.$el.hasClass('active')) {
+          $('.list-group-item').show();
+          // remove filter
+          assignee.$el.removeClass('active');
+        } else {
+          filterPrs(assignee);
+          assignee.$el.addClass('active');
+        }
       });
       this.$assignees.append(assignee.$el);
     } else {
