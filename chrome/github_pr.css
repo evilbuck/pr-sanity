@@ -52,35 +52,32 @@ li.list-group-item.failed {
   box-shadow: 0 0 3px 3px rgba(237, 0, 0, .5);
 }
 
-.list-group-item {
-  position: relative;
+.pr-sanity {
+  color: #4f4f4f;
+  font-size: 12px;
+  font-weight: normal;
+  height: 23px;
+  line-height: 23px;
+  left: 0;
+  overflow: hidden;
+  padding: 4px 10px;
+  padding-top: 4px;
 }
 
   .pr-sanity .files-changed {
-    background: #0d7aad;
-    border-radius: 13px;
-    color: #fff;
-    position: absolute;
-    left: -14px;
-    padding: 5px;
-    width: 18px;
-    height: 18px;
-    text-align: center;
-    top: 26px;
+    font-weight: bold;
+    margin-right: 15px;
+    padding: 3px;
     -webkit-transition: width .3s;
-  }
-
-  .pr-sanity .files-changed .copy {
-    display: none;
-    margin-left: 5px;
   }
 
     .pr-sanity .files-changed:hover {
       width: 190px;
     }
-      .pr-sanity .files-changed:hover .copy {
-        display: inline-block;
-      }
+
+    .pr-sanity .files-changed .copy {
+      font-weight: normal;
+    }
 
   .pr-sanity .updating {
     margin-left: 10px;
@@ -88,10 +85,8 @@ li.list-group-item.failed {
 
 .pr-sanity-name {
   font-weight: bold;
+  margin-right: 10px !important;
   padding: 3px;
-  background: #badafc;
-  border: 1px solid #106ba0;
-  border-radius: 4px;
   white-space: nowrap;
 }
 
@@ -101,3 +96,25 @@ li.list-group-item.failed {
 .pr-sanity .passed {
   color: green;
 }
+
+  .pr-sanity .status {
+    display: inline-block;
+    float: none !important;
+  }
+
+.list-group-item-meta .branch-name {
+  display: none;
+}
+
+.list-group-item-summary {
+  display: none;
+}
+
+.list-group-item-name {
+  float: left;
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+text-overflow: ellipsis;
