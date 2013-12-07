@@ -60,7 +60,7 @@
 
 
   function updatePR(details) {
-    var $prListItem, $prHeader;
+    var $prListItem, $prHeader, $assigneeName;
 
     // save details
     localStorage.setItem('pr:' + details.id, JSON.stringify(details));
@@ -73,20 +73,16 @@
       $prListItem.addClass('failed');
     }
 
-    $prHeader.find('.pr-sanity').remove();
-    assignee_style = "font-weight: normal; color: green;";
-    if (details.assignee == "No one is assigned"){
-      assignee_style = "font-weight: bold; color: blue;";
-    }
+    $prListItem.find('.pr-sanity').remove();
 
-    var $assigneeName = ($prHeader.find('.pr-sanity-name').length) ? $prHeader.find('.pr-sanity-name') : $('<span class="pr-sanity-name">' + details.assignee + '</span>');
-    $assigneeName.prependTo($prHeader);
+    $prSanity = $('<div class="pr-sanity">' + 
+                    '<span class="pr-sanity-name">' + details.assignee + ' assigned</span>' + 
+                    '<span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span>' +
+                    '<div class="status">' + details.status + '</div>' +
+                    '<span class="updating" style="display:none">updating</span>' +
+                  '</div>');
+    $prListItem.find('.list-group-item-name').append($prSanity);
 
-    $prHeader.append('<div class="pr-sanity">' + 
-                       '<span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span>' +
-                       '<div class="status" style="clear: both; font-size: 12px; font-weight: normal">' + details.status + '</div>' +
-                       '<span class="updating" style="display:none">updating</span>' +
-                     '</div>');
   }
 
   // add the assignee container
@@ -116,7 +112,7 @@
 
 
     jqxhr.error(function(j, status, e){
-      console.warn('some error', e, status);
+      console.error('some error', e, status);
     });
 
     jqxhr.done(function(res){
@@ -133,7 +129,7 @@
         prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim().replace(/ is assigned/i, '');
 
         // get status
-        prInfo.status = $prDoc.find('.merge-branch .branch-status').text().trim();
+        prInfo.status = $prDoc.find('.merge-branch .branch-status').text().trim().split('—')[0];
         
         // get the files changed
         prInfo.files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
