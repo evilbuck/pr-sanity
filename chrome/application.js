@@ -15,6 +15,12 @@
       .filter(':contains("' + assignee.name + '")').show();
   }
 
+  function parseDocument(html){
+    var d = document.implementation.createHTMLDocument('');
+    d.body.innerHTML = html.replace(/<!DOCTYPE html>/i, '');
+    return $(d);
+  }
+
   function AssigneeContainer() {
     this.assignees = {};
     // create assignee container
@@ -60,7 +66,7 @@
 
 
   function updatePR(details) {
-    var $prListItem, $prHeader, $assigneeName;
+    var $prListItem, $prHeader, $assigneeName, $prSanity;
 
     // save details
     localStorage.setItem('pr:' + details.id, JSON.stringify(details));
@@ -90,7 +96,7 @@
   $('.column.sidebar').append(assigneeContainer.$assigneeContainer);
 
   $('.list-group-item h4 a').each(function(){
-    var $prHeader, $prListItem, $this, key, jqxhr, prNumber, cache;
+    var $prHeader, $prListItem, $this, key, jqxhr, prNumber, cache, $prSanity;
 
     $prHeader = $(this).parent();
     $prListItem = $prHeader.parent();
@@ -111,6 +117,11 @@
     });
 
 
+    // types of files
+    // TODO: DRY this up
+    var filesChangedUrl = $(this).attr('href') + '/files';
+    var filesChangedXhr = $.get(filesChangedUrl);
+
     jqxhr.error(function(j, status, e){
       console.error('some error', e, status);
     });
@@ -120,10 +131,7 @@
 
         prInfo = {id: prNumber};
 
-        // parse document
-        d = document.implementation.createHTMLDocument('');
-        d.body.innerHTML = res.replace(/<!DOCTYPE html>/i, '');
-        $prDoc = $(d);
+        $prDoc = parseDocument(res);
 
         // find if anyone is assigned
         prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim().replace(/ is assigned/i, '');
@@ -134,8 +142,41 @@
         // get the files changed
         prInfo.files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
 
+
         updatePR.call($prListItem, prInfo);
+        $prSanity = $prListItem.find('.pr-sanity');
         assigneeContainer.addAssignee({name: prInfo.assignee});
+
+        filesChangedXhr.done(function(res){
+          var $doc, fileTypeCount, filesChanged, filesChanged,
+            sorted, sortableFileTypeCounts;
+          $doc = parseDocument(res);
+          fileTypeCount = $doc.find('#toc li > a').map(function(_, el){ 
+            return $(el).text().trim().match(/\.\w+$/i);
+          }).get().reduce(function(memo, item){
+            if (!memo[item]) memo[item] = 0;
+            memo[item]++;
+            return memo;
+          }, {});
+
+          $fileTypeCounts = $('<ul class="pr-sanity-file-type-counts"></ul>');
+          
+          sortableFileTypeCounts = [];
+          for(type in fileTypeCount) {
+            sortableFileTypeCounts.push({type: type, count: fileTypeCount[type]});
+          }
+          sorted = sortableFileTypeCounts.sort(function(a, b){
+            return b.count - a.count;
+          }).slice(0, 5).forEach(function(fileTypeCount){ 
+            var fileType = fileTypeCount.type.replace(/\./, '');
+            $fileTypeCounts.append('<li>' +
+                                    fileTypeCount.count +
+                                   '<span class="file-type-icon ' + fileType + '">' + fileType + '</span>' +
+                                   '</li>');
+          });
+          
+          $prListItem.append($fileTypeCounts);
+        });
     });
   });
 })(jQuery);

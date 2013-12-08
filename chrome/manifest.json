@@ -1,6 +1,6 @@
 {
 	"name": "PR Sanity",
-	"version": "0.1.6",
+	"version": "0.2.0",
 	"manifest_version": 2,
   "background": {
     "scripts": [ "underscore.js", "jquery.js", "background.js" ],
