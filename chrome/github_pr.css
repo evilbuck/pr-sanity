@@ -1,3 +1,8 @@
+li.list-group-item {
+  position: relative;
+  padding-left: 45px !important;
+}
+
 li.list-group-item.passed {
   background-color: #ddffe8 !important;
 }
@@ -5,6 +10,23 @@ li.list-group-item.passed {
 li.list-group-item.failed {
   background-color: #ffe5e5 !important;
 }
+
+  .pr-sanity-file-type-counts {
+    font: bold 10px Arial;
+    height: 100%;
+    left: 0; 
+    list-style: none;
+    padding: 0 3px;
+    position: absolute;
+    top: 0;
+    width: 30px;
+  }
+
+    .pr-sanity-file-type-counts .file-type-icon {
+      font-weight: normal;
+      margin-left: 3px;
+      line-height: 1.3em;
+    }
 
 .sanity-assignees-wrapper ul {
   list-style: none;
