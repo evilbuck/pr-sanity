@@ -1,6 +1,6 @@
 li.list-group-item {
   position: relative;
-  padding-left: 45px !important;
+  padding-left: 50px !important;
 }
 
 li.list-group-item.passed {
@@ -19,8 +19,14 @@ li.list-group-item.failed {
     padding: 0 3px;
     position: absolute;
     top: 0;
-    width: 30px;
+    width: 40px;
   }
+
+    .pr-sanity-file-type-counts li {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
 
     .pr-sanity-file-type-counts .file-type-icon {
       font-weight: normal;
