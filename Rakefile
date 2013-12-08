@@ -1,10 +1,11 @@
 require "open3"
 require "fileutils"
-require "zip/zip"
+require "zip"
 
 APP_PATH = File.dirname(__FILE__)
 COMPILE_PATH = File.join(APP_PATH, "pr-sanity")
 LIB_PATH = File.join(APP_PATH, "lib")
+ZIP_FILE_NAME = File.join(COMPILE_PATH + ".zip")
 
 namespace :extension do
   desc "build extension, compile javascript files using closure"
@@ -19,6 +20,15 @@ namespace :extension do
       new_path = File.join( COMPILE_PATH, file )
       stdin, stdout, stderr = Open3.popen3("/usr/bin/java -jar #{File.join(LIB_PATH, "compiler.jar")} --js #{path} --js_output_file #{new_path}")
       puts "finished compiling #{file}"
+    end
+
+    # Zip the files
+    puts "zipping the files"
+    FileUtils.rm_rf(ZIP_FILE_NAME) if File.exists? ZIP_FILE_NAME
+    Zip::File.open(ZIP_FILE_NAME, Zip::File::CREATE) do |zipfile|
+      Dir[File.join(COMPILE_PATH, '**', '**')].each do |file|
+        zipfile.add(file.sub(COMPILE_PATH + '/', ''), file)
+      end
     end
   end
 end
