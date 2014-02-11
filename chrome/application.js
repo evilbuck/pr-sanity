@@ -12,7 +12,9 @@
   // TODO make the assignee keep track of it's pr elements
   function filterPrs(assignee) {
     $('.list-group-item').hide()
-      .filter(':contains("' + assignee.name + '")').show();
+      .filter(function(index){
+        return $(this).data('assignee-name') === assignee.name;
+      }).show();
   }
 
   function parseDocument(html){
@@ -54,7 +56,6 @@
       });
       this.$assignees.append(assignee.$el);
     } else {
-
       // TODO: DRY this up
       assignee = this.assignees[name];
     }
@@ -66,29 +67,48 @@
 
 
   function updatePR(details) {
-    var $prListItem, $prHeader, $assigneeName, $prSanity;
+    var $prListItem, $prHeader, $assigneeName, $prSanity, $meta, assigneeClass,
+      $prSanityMeta;
 
     // save details
     localStorage.setItem('pr:' + details.id, JSON.stringify(details));
     $prListItem = this;
     $prHeader = $prListItem.find('h4');
+    $meta     = $prListItem.find('.list-group-item-meta');
 
+    $prListItem.data('assignee-name', details.assignee);
     if ((/good to merge/im).test(details.status)) {
       $prListItem.addClass('passed');
     } else if ((/failed/im).test(details.status)) {
       $prListItem.addClass('failed');
     }
 
+    // just updating might be better
     $prListItem.find('.pr-sanity').remove();
+    $prListItem.find('*[class^="pr-sanity"]').remove();
 
     $prSanity = $('<div class="pr-sanity">' + 
-                    '<span class="pr-sanity-name">' + details.assignee + ' assigned</span>' + 
                     '<span class="files-changed">' + details.files_changed + '<span class="copy"> files changed</span></span>' +
-                    '<div class="status">' + details.status + '</div>' +
                     '<span class="updating" style="display:none">updating</span>' +
                   '</div>');
     $prListItem.find('.list-group-item-name').append($prSanity);
 
+    $prSanityMeta = $('<div class="pr-sanity-meta"></div>');
+    $prSanityMeta.append('<div class="pr-sanity-status"><span class="pass">&#10004;</span><span class="fail">' + details.status + '</span></div>');
+
+    // check for a passing message
+    if ((/all is well|pass/i).test(details.status)) {
+      $prSanityMeta.find('.pr-sanity-status').addClass('pr-sanity-passed');
+    }
+    // failing
+    if ((/fail/i).test(details.status)) {
+      $prSanityMeta.find('.pr-sanity-status').addClass('pr-sanity-fail');
+    }
+    
+    if ((/no one/i).test(details.assignee)) {
+      $prSanityMeta.append('<span class="pr-sanity-name pr-sanity-no-assignee">UNASSIGNED</span>');
+    }
+    $meta.prepend($prSanityMeta);
   }
 
   // add the assignee container
@@ -137,7 +157,7 @@
         prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim().replace(/ is assigned/i, '');
 
         // get status
-        prInfo.status = $prDoc.find('.merge-branch .branch-status').text().trim().split('—')[0];
+        prInfo.status = $prDoc.find('.branch-status').text().trim().split('—')[0];
         
         // get the files changed
         prInfo.files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
@@ -147,6 +167,7 @@
         $prSanity = $prListItem.find('.pr-sanity');
         assigneeContainer.addAssignee({name: prInfo.assignee});
 
+        // TODO: cleanup nested promsises
         filesChangedXhr.done(function(res){
           var $doc, fileTypeCount, filesChanged, filesChanged,
             sorted, sortableFileTypeCounts;
