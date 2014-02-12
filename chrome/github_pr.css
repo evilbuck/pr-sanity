@@ -1,25 +1,12 @@
-li.list-group-item {
-  position: relative;
-  padding-left: 50px !important;
-}
-
-li.list-group-item.passed {
-  background-color: #ddffe8 !important;
-}
-
-li.list-group-item.failed {
-  background-color: #ffe5e5 !important;
-}
-
   .pr-sanity-file-type-counts {
     font: bold 10px Arial;
     height: 100%;
     left: 0; 
     list-style: none;
-    padding: 0 3px;
+    padding: 9px 6px;
     position: absolute;
     top: 0;
-    width: 40px;
+    width: 50px;
   }
 
     .pr-sanity-file-type-counts li {
@@ -49,10 +36,10 @@ li.list-group-item.failed {
   border-radius: 12px;
   color: #fff;
   display: inline-block;
-  height: 16px;
+  height: 23px;
   margin-right: .5em;
   padding: 3px;
-  width: 16px;
+  width: 23px;
   text-align: center;
 }
 
@@ -82,14 +69,14 @@ li.list-group-item.failed {
 
 .pr-sanity {
   color: #4f4f4f;
+  display: inline-block;
   font-size: 12px;
   font-weight: normal;
   height: 23px;
   line-height: 23px;
   left: 0;
-  overflow: hidden;
   padding: 4px 10px;
-  padding-top: 4px;
+  padding-top: 8px;
 }
 
   .pr-sanity .files-changed {
@@ -125,24 +112,54 @@ li.list-group-item.failed {
   color: green;
 }
 
-  .pr-sanity .status {
+  .pr-sanity-status {
     display: inline-block;
-    float: none !important;
+    margin-right: 4px;
   }
 
-.list-group-item-meta .branch-name {
+.list-group-item {
+  padding-left: 51px !important;
+}
+
+.list-group-item-name .type-icon {
+    display: none;
+}
+
+.list-group-item-meta .pr-sanity-name {
+  color: #fff;
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.list-group-item-meta .pr-sanity-status {
+  color: #fff;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.list-group-item-meta .pr-sanity-status.pr-sanity-passed .fail {
   display: none;
 }
 
-.list-group-item-summary {
+.list-group-item-meta .pr-sanity-status .pass {
+  color: #35BF26;
+}
+
+.list-group-item-meta .pr-sanity-status.pr-sanity-fail .pass {
   display: none;
 }
 
-.list-group-item-name {
-  float: left;
-  width: 50%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.list-group-item-meta .pr-sanity-status.pr-sanity-fail {
+  background-color: #e00606;
 }
-text-overflow: ellipsis;
+
+.list-group-item-meta .pr-sanity-no-assignee {
+  background-color: #fc495e;
+}
+.list-group-item-meta .pr-sanity-assignee {
+  background-color: #3fc2ff;
+}
+
+.pr-sanity-meta {
+  display: inline-block;
+}

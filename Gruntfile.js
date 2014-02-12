@@ -21,7 +21,8 @@ module.exports = function(grunt){
     compress: {
       main: {
         options: {
-          archive: 'pr-sanity.zip'
+          archive: 'pr-sanity.zip',
+          mode: 'zip'
         },
         files: [
           {src: ['pr-sanity/**'], dest: './'}
