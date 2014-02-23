@@ -1,13 +1,13 @@
 ;(function($){
-  var $sort, $sortByOldestLink;
-  // are we sorted by oldest?
-  $sort = $('.issues-list-options .js-select-button');
-  if (!(/oldest/i).test($sort.text())) {
-    $sortByOldestLink = $('<span class="failed">&larr;This is not sorted by oldest?</a></span>').click(function(){
-      window.location.href = window.location.origin + window.location.pathname + "?direction=asc&sort=created&state=open";
-    }).css('cursor', 'pointer');
-    $sort.parents('.select-menu').append($sortByOldestLink);
-  }
+  //var $sort, $sortByOldestLink;
+  //// are we sorted by oldest?
+  //$sort = $('.issues-list-options .js-select-button');
+  //if (!(/oldest/i).test($sort.text())) {
+    //$sortByOldestLink = $('<span class="failed">&larr;This is not sorted by oldest?</a></span>').click(function(){
+      //window.location.href = window.location.origin + window.location.pathname + "?direction=asc&sort=created&state=open";
+    //}).css('cursor', 'pointer');
+    //$sort.parents('.select-menu').append($sortByOldestLink);
+  //}
 
   // TODO make the assignee keep track of it's pr elements
   function filterPrs(assignee) {
@@ -77,9 +77,9 @@
     $meta     = $prListItem.find('.list-group-item-meta');
 
     $prListItem.data('assignee-name', details.assignee);
-    if ((/good to merge/im).test(details.status)) {
+    if ((/success/im).test(details.branchStatus)) {
       $prListItem.addClass('passed');
-    } else if ((/failed/im).test(details.status)) {
+    } else if ((/failed|error/im).test(details.branchStatus)) {
       $prListItem.addClass('failed');
     }
 
@@ -94,14 +94,14 @@
     $prListItem.find('.list-group-item-name').append($prSanity);
 
     $prSanityMeta = $('<div class="pr-sanity-meta"></div>');
-    $prSanityMeta.append('<div class="pr-sanity-status"><span class="pass">&#10004;</span><span class="fail">' + details.status + '</span></div>');
+    $prSanityMeta.append('<div class="pr-sanity-status" title="' + details.fullStatus + '"><span class="pass">&#10004;</span><span class="fail">' + details.status + '</span></div>');
 
     // check for a passing message
-    if ((/all is well|pass/i).test(details.status)) {
+    if (details.branchStatus === 'success') {
       $prSanityMeta.find('.pr-sanity-status').addClass('pr-sanity-passed');
     }
     // failing
-    if ((/fail/i).test(details.status)) {
+    if ((/fail|error/i).test(details.branchStatus)) {
       $prSanityMeta.find('.pr-sanity-status').addClass('pr-sanity-fail');
     }
     
@@ -147,7 +147,8 @@
     });
 
     jqxhr.done(function(res){
-        var d, $prDoc, assignee, status, status_color, files_changed, prInfo;
+        var d, $prDoc, assignee, status, status_color, files_changed, prInfo,
+          $branchStatus;
 
         prInfo = {id: prNumber};
 
@@ -157,17 +158,26 @@
         prInfo.assignee = $prDoc.find('.js-assignee-infobar-item-wrapper').text().trim().replace(/ is assigned/i, '');
 
         // get status
-        prInfo.status = $prDoc.find('.branch-status').text().trim().split('—')[0];
+        prInfo.fullStatus = $prDoc.find('.branch-status').text().trim();
+        prInfo.status = prInfo.fullStatus.split('—')[0];
+        $branchStatus = $prDoc.find('.branch-status');
+
+        if ($branchStatus.hasClass('status-error')) {
+          prInfo.branchStatus = 'error';
+        } else if ($branchStatus.hasClass('status-failure')) {
+          prInfo.branchStatus = 'fail';
+        } else if ($branchStatus.hasClass('status-success')) {
+          prInfo.branchStatus = 'success';
+        }
         
         // get the files changed
         prInfo.files_changed = $prDoc.find('a[data-container-id="files_bucket"]').text().trim().replace(/[^\d]/gm, '');
-
 
         updatePR.call($prListItem, prInfo);
         $prSanity = $prListItem.find('.pr-sanity');
         assigneeContainer.addAssignee({name: prInfo.assignee});
 
-        // TODO: cleanup nested promsises
+        // TODO: cleanup nested promises
         filesChangedXhr.done(function(res){
           var $doc, fileTypeCount, filesChanged, filesChanged,
             sorted, sortableFileTypeCounts;
