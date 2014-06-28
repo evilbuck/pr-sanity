@@ -1,7 +1,7 @@
 {
 	"name": "Github PR Sanity",
   "short_name": "PR Sanity",
-	"version": "0.3.2",
+	"version": "0.3.4",
   "description": "Improvements to Github's Pull Request list. See who's assigned, build statuses, files changed by type.",
 	"manifest_version": 2,
   "background": {
