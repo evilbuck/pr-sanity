@@ -113,7 +113,7 @@
 
   // add the assignee container
   var assigneeContainer = new AssigneeContainer();
-  $('.column.sidebar').append(assigneeContainer.$assigneeContainer);
+  $('.column.one-fourth').append(assigneeContainer.$assigneeContainer);
 
   $('.list-group-item h4 a').each(function(){
     var $prHeader, $prListItem, $this, key, jqxhr, prNumber, cache, $prSanity;
